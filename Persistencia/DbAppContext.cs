@@ -18,6 +18,7 @@ namespace Persistencia
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+           // SeedingInicial.Seed(odelBuilder);
         }
          public DbSet<Hamburguesa> Hamburguesas { get; set; }
         public DbSet<Chef> Chefs { get; set; }
