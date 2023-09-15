@@ -1,4 +1,4 @@
-
+/* 
 
 using System.Linq.Expressions;
 using Dominio.Entities;
@@ -23,4 +23,4 @@ public class UsuarioRepository : GenericRepository<Usuario>, IUsuario
                             .FirstOrDefaultAsync(u=>u.Username.ToLower()==username.ToLower());
     }
    
-}
+} */

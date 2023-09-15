@@ -1,4 +1,4 @@
-
+/* 
 
 using Dominio.Entities;
 
@@ -8,4 +8,4 @@ namespace Dominio.Interfaces
     {
         Task<Usuario> GetByUsernameAsync(string username);
     }
-}
+} */

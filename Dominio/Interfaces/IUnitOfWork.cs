@@ -4,8 +4,11 @@ namespace Dominio.Interfaces;
 
     public interface IUnitOfWork
     {
-         IUsuario Usuarios {get;}
-         IRol Roles {get;}
+        IHamburguesa Hamburguesas {get;}
+        IIngrediente Ingredientes {get;}
+        IChef Chefs {get;}
+        ICategoria Categorias {get;}
+        IHamburguesaIngrediente HamburguesaIngredientes {get;}
         Task<int> SaveAsync();
     }
 
