@@ -17,5 +17,6 @@ public interface IHamburguesaIngrediente
     void Remove(HamburguesaIngrediente entity);
     void RemoveRange(IEnumerable<HamburguesaIngrediente> entities);
     void Update(HamburguesaIngrediente entity);
+    HamburguesaIngrediente AddToClassic(int idIngrediente);
 
 }

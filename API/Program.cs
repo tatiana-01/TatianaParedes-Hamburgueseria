@@ -1,6 +1,7 @@
+using System.Reflection;
 using API.Extensions;
 using API.Helpers;
-
+using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Persistencia;
@@ -8,17 +9,17 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var logger = new LoggerConfiguration()
+/* var logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(builder.Configuration)
                     .Enrich.FromLogContext()
                     .CreateLogger();
 
 //builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
+builder.Logging.AddSerilog(logger); */
 /*
  el context accessor nos permite que podamos implementar la autorizacion de roles
 */
-builder.Services.AddHttpContextAccessor();
+//builder.Services.AddHttpContextAccessor();
 // Add services to the container.
 
 builder.Services.AddControllers(options =>
@@ -30,26 +31,31 @@ builder.Services.AddControllers(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.ConfigureRateLimiting();
+builder.Services.ConfigureApiVersioning();
+builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 
 builder.Services.ConfigureCors();
+builder.Services.AddApplicationServices();
 
 
-builder.Services.AddAuthorization(opts =>{
+/* builder.Services.AddAuthorization(opts =>{
     opts.DefaultPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
-});
-builder.Services.AddDbContext<DbAppContext>(options =>
+}); */
+builder.Services.AddDbContext<DbAppContext>(optionsBuilder =>
 {
     string connectionString = builder.Configuration.GetConnectionString("ConexMysql");
-    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+    optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
 
 var app = builder.Build();
 
 //app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseStatusCodePagesWithReExecute("/errors/{0}");
+
+//app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -75,6 +81,7 @@ using (var scope = app.Services.CreateScope())
 app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
+app.UseIpRateLimiting();
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -69,4 +69,16 @@ public class HamburguesaIngredienteRepository: IHamburguesaIngrediente
             .ToListAsync();
         return (totalRegistros, registros);
     }
+
+    public HamburguesaIngrediente AddToClassic(int idIngrediente){
+        var hamburguesaClasica= _context.Hamburguesas.FirstOrDefault(p=>p.Nombre.ToLower().Contains("clasica"));
+        var nuevoIngrediente= new HamburguesaIngrediente(){
+            Hamburguesa_id=hamburguesaClasica.Id,
+            Ingrediente_id=idIngrediente
+        };
+        _context.HamburguesaIngredientes.Add(nuevoIngrediente);
+        return nuevoIngrediente;
+    }
+
+  
 }
